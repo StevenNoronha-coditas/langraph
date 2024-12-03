@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "langraph"
+version = "0.1.0"
+description = ""
+authors = ["steven.noronha-coditas <steven.noronha@coditas.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+langchain = "^0.3.8"
+python-dotenv = "^1.0.1"
+langchain-groq = "^0.2.1"
+flask = "^3.1.0"
+flask-cors = "^5.0.0"
+langgraph = "^0.2.53"
+langchain-community = "^0.3.8"
+tavily-python = "^0.5.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

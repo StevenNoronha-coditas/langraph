@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Blog Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: rgba(25, 206, 55, 0.712);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        #result {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            padding: 2rem;
+            background-color: white;
+        }
+        .blog-content {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Blog Generator</h1>
+        <div class="input-group">
+            <input type="text" id="topic" placeholder="Enter your blog topic..." required>
+            <button onclick="generateBlog()">Generate Blog</button>
+        </div>
+        <div id="loading">Generating blog... Please wait...</div>
+        <div id="error" class="error"></div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function generateBlog() {
+            const topic = document.getElementById('topic').value;
+            const loadingDiv = document.getElementById('loading');
+            const resultDiv = document.getElementById('result');
+            const errorDiv = document.getElementById('error');
+
+            if (!topic) {
+                errorDiv.textContent = 'Please enter a topic';
+                return;
+            }
+
+            try {
+                loadingDiv.style.display = 'block';
+                resultDiv.innerHTML = '';
+                errorDiv.textContent = '';
+
+                const response = await fetch('http://localhost:5000/generate-blog', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ topic: topic })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    resultDiv.innerHTML = data.result;
+                } else {
+                    errorDiv.textContent = data.error || 'Failed to generate blog';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'Error: ' + error.message;
+            } finally {
+                loadingDiv.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html> 
